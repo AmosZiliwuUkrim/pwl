@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Student extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'students';
+    protected $appends = ['age'];
+
+    // Definisi hubungan dengan model Teacher
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'id_teacher', 'id');
+    }
+
+    // Metode untuk menghitung umur siswa berdasarkan tanggal lahir
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->dob)->age;
+    }
+}
